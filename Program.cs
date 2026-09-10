@@ -32,6 +32,10 @@ class Program
             {
                 BackOutside(hero);
             }
+            else if (hero.location == "shelter")
+            {
+                //Shelter(hero);
+            }
             else if (hero.location == "boss fight")
             {
                 BossFight(hero);
@@ -208,6 +212,19 @@ class Program
         Console.ReadLine();
         hero.location = "boss fight";
     }
+    
+  /*  static void Shelter(Hero hero)
+    {
+        Console.Clear();
+        Console.WriteLine("Through the hole you find yourself in a large dark space\n In front of you a large spider appears and moves towards you");
+        //Enemy spider = new Enemy("Spider", 25);
+        //Battle(hero, spider);
+    
+        Console.WriteLine("The spider drops a special potion, you use it to regain som strength\n There's nothing more in the ground and must face the enemy you fled from");
+        //hero.Health += 50;
+        //hero.Location = "bossfight";
+        Console.ReadLine();
+    }*/
 
     static void BossFight(Hero hero)
     {
