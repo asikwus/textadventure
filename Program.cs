@@ -211,6 +211,24 @@ class Program
         Console.WriteLine("A minotaur appears and charges towards you!");
         Console.ReadLine();
         hero.location = "boss fight";
+        
+       /* string direction = "";
+        do
+        { direction = Ask("Do you want to stay and face the enemy or flee though a small hole in the ground? (Stay/flee) ");
+        } while (!AskYesOrNo($"So you want to to {direction}? "));
+
+        if (direction == "stay")
+        {
+            Console.WriteLine("You stand your ground and face the charging enemy ");
+            hero.Location = "bossfight";
+            Console.ReadLine();
+        }
+        else
+        {
+            Console.WriteLine(" You flee through the ground ");
+            hero.Location = "shelter";
+            Console.ReadLine();
+        }*/
     }
     
   /*  static void Shelter(Hero hero)
