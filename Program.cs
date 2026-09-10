@@ -1,5 +1,5 @@
 ﻿namespace TextAdventure;
-
+//Det här är en kommentar.
 class Program
 {
     static void Main(string[] args)
