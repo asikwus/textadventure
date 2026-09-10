@@ -1,8 +1,7 @@
 ﻿namespace TextAdventure;
 
-public class Monster
+public class Enemy
 {
     public string name = "";
     public int health = 100;
-    public int damage = 25;
 }

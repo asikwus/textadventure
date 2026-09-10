@@ -32,6 +32,22 @@ class Program
             {
                 BackOutside(hero);
             }
+            else if (hero.location == "boss fight")
+            {
+                BossFight(hero);
+            }
+            else if (hero.location == "win")
+            {
+                Win(hero);
+            }
+            else if (hero.location == "lose")
+            {
+                Lose(hero);
+            }
+            else if (hero.location == "game over")
+            {
+                GameOver(hero);
+            }
             else
             {
                 Console.Error.WriteLine($"You forgot to implement '{hero.location}'!");
@@ -67,25 +83,41 @@ class Program
         Console.WriteLine("a knife and a key.");
         Console.WriteLine("");
         Console.WriteLine("You can only pick up one of these items.");
-        while (true)
+        string tableroomItem = "";
+        do
         {
-            string item = Ask("Which item do you choose? ").ToLower();
-            if (item == "key")
+            tableroomItem = Ask("Which item do you choose? ");
+            switch (tableroomItem)
             {
-                AskYesOrNo("Do you want to pick up the key? ");
-                hero.items.Add("key");
-                Console.WriteLine("You pick up the key");
-                break;
+                case "key":
+                    tableroomItem = "key";
+                    break;
+                case "knife":
+                    tableroomItem = "knife";
+                    break;
+                case "none":
+                    tableroomItem = "none";
+                    break;
+                default:
+                    tableroomItem = "";
+                    continue;
             }
 
-            if (item == "knife")
+            if (tableroomItem == "none")
             {
-                AskYesOrNo("Do you want to pick up the knife? ");
-                hero.items.Add("knife");
-                Console.WriteLine("You pick up the knife");
-                break;
+                if (!AskYesOrNo("Do you want to proceed without picking an item? "))
+                    tableroomItem = "";
             }
-        }
+            else
+            {
+                if (!AskYesOrNo($"Do you want to pick up the {tableroomItem}? "))
+                    tableroomItem = "";
+                else
+                    Console.WriteLine($"You picked up the {tableroomItem}");
+            }
+        } while (tableroomItem == "");
+        
+        hero.items.Add(tableroomItem);
 
         Console.ReadLine();
         hero.location = "corridor";
@@ -139,14 +171,16 @@ class Program
         {
             Console.WriteLine("You let the shiny sword be.");
         }
-        
+
         Console.ReadLine();
         hero.location = "third room";
     }
 
     static void ThirdRoom(Hero hero)
     {
-        Console.WriteLine("On the floor before you lies a lifeless corpse.\n" + "Its hand is clasped around something shiny.\n");
+        Console.Clear();
+        Console.WriteLine("On the floor before you lies a lifeless corpse.\n" +
+                          "Its hand is clasped around something shiny.\n");
         if (AskYesOrNo("Do you loot the corpse or leave it?"))
         {
             Console.WriteLine("You pick up an old silver necklace.");
@@ -169,25 +203,147 @@ class Program
 
     static void BackOutside(Hero hero)
     {
+        Console.Clear();
         Console.WriteLine("A minotaur appears and charges towards you!");
-        string defence = Ask("")
         Console.ReadLine();
+        hero.location = "boss fight";
     }
 
     static void BossFight(Hero hero)
     {
+        Console.Clear();
+        // Set up enemy
+        Enemy minotaur = new Enemy();
+        minotaur.name = "Minotaur";
+        minotaur.health = 100;
+        // Set up hero
+        string heroAction = "";
+        int heroAttack = 1;
+        if (hero.items.Contains("shiny sword"))
+            heroAttack += 8;
+        if (hero.items.Contains("wooden sword"))
+            heroAttack += 1;
+        if (hero.items.Contains("knife"))
+            heroAttack += 2;
+        if (hero.items.Contains("blessed amulet"))
+            heroAttack += 1;
+        if (hero.items.Contains("cursed amulet"))
+            heroAttack -= 1;
+
+        do
+        {
+            Console.WriteLine($"{hero.name}s health: {hero.health} || Minotaurs health {minotaur.health}");
+
+            Console.Write("The minotaur prepares to attack : ");
+            if (heroAction != "paralyzed")
+            {
+                do
+                {
+                    heroAction = Ask("do you want to dodge/jump/parry? ");
+                    if (heroAction != "dodge" || heroAction != "jump" || heroAction != "parry")
+                    {
+                        continue;
+                    }
+                } while (heroAction == "" || !AskYesOrNo($"Are you sure you want to {heroAction}? "));
+            }
+            else
+            {
+                Console.WriteLine($"you are recovering from the {minotaur.name}'s last attack. ");
+                heroAction = "";
+            }
+
+            if (RollD6() >= 4)
+            {
+                Console.WriteLine($"The {minotaur.name} swings its club.");
+                switch (heroAction)
+                {
+                    case "dodge":
+                        Console.WriteLine("You dodge towards the powerful but slow swing, \n" +
+                                          "and manage to do a counter-attack with your weapons");
+                        // Enemy attacks
+                        hero.health -= 5;
+                        // Hero attacks
+                        tellAmuletEffect(hero);
+                        minotaur.health -= heroAttack;
+                        break;
+                    case "jump":
+                        Console.WriteLine("You jumped in your stand, and didn't dodge the swing of the club.\n" +
+                                          "You take critical damage!");
+                        // Enemy attacks
+                        hero.health -= 25;
+                        break;
+                    case "parry":
+                        Console.WriteLine(
+                            "You parry the attack with your weapons. It doesn't prevent the minotaur's club \n" +
+                            "but you manage to inflict some damage to the minotaur. ");
+                        // Enemy attacks
+                        hero.health -= 25;
+                        // Hero attacks
+                        tellAmuletEffect(hero);
+                        minotaur.health -= heroAttack;
+                        break;
+                    default:
+                        Console.WriteLine("It lands a critical hit on you!");
+                        // Enemy attacks
+                        hero.health -= 25;
+                        break;
+                }
+            }
+            else
+            {
+                Console.WriteLine("The minotaur beat its club in the ground, and the ground shakes heavily. ");
+                switch (heroAction)
+                {
+                    case "dodge":
+                        Console.WriteLine(
+                            "There's nowhere to dodge from the ground. You lose your stance on your feet, \n" +
+                            "and fall on your back");
+                        // Minotaur attacks
+                        heroAction = "paralyzed";
+                        break;
+                    case "jump":
+                        Console.WriteLine("You jump and avoid the earthquake from the club,\n" +
+                                          "and manage to counter-attack minotaur whom is caught off guard. \n"
+                                          + "You deal a lot of damage with your weapons.");
+                        // Hero attacks
+                        minotaur.health = heroAttack*2;
+                        break;
+                    case "parry":
+                        Console.WriteLine("You run towards the minotaur, but lose balance on the shaking ground. \n" +
+                                          "You trip with your weapons on the minotaur who lifts its club and flings you back.");
+                        // Minotaur attacks
+                        hero.health -= 5;
+                        // Hero attacks
+                        minotaur.health -= 5;
+                        break;
+                    default:
+                        Console.WriteLine("The ground bounces you back on your feet!");
+                        break;
+                }
+            }
+
+            Console.ReadLine();
+        } while (hero.health > 0 && minotaur.health > 0);
+        
+        if (hero.health > 0)
+            hero.location = "win";
+        else
+            hero.location = "lose";
     }
 
     static void Win(Hero hero)
     {
+        hero.location = "game over";
     }
 
     static void Lose(Hero hero)
     {
+        hero.location = "game over";
     }
 
     static void GameOver(Hero hero)
     {
+        hero.location = "new game";
     }
 
     // ** QUESTIONS **
@@ -220,6 +376,21 @@ class Program
         }
     }
 
+    // ** ITEM EFFECTS **
+
+    static void tellAmuletEffect(Hero hero)
+    {
+        if (hero.items.Contains("blessed amulet") && !hero.items.Contains("cursed amulet"))
+            Console.WriteLine(
+                "The amulet makes your aim with your weapons confident, \n" +
+                "and you deal extra damage!");
+        else if (hero.items.Contains("cursed amulet") && !hero.items.Contains("blessed amulet"))
+            Console.WriteLine(
+                "The amulet makes you feel uncertain where to aim on the monster. \n" +
+                "You deal less damage than normal!");
+    }
+
+    // ** DIES **
     static int RollD6()
     {
         Random random = new Random();
