@@ -34,7 +34,7 @@ class Program
             }
             else if (hero.location == "shelter")
             {
-                //Shelter(hero);
+                Shelter(hero);
             }
             else if (hero.location == "boss fight")
             {
@@ -185,7 +185,7 @@ class Program
         Console.Clear();
         Console.WriteLine("On the floor before you lies a lifeless corpse.\n" +
                           "Its hand is clasped around something shiny.\n");
-        if (AskYesOrNo("Do you loot the corpse or leave it?"))
+        if (AskYesOrNo("Do you loot the corpse?"))
         {
             Console.WriteLine("You pick up an old silver necklace.");
             if (RollD6() >= 3) // 67% chance
@@ -210,9 +210,9 @@ class Program
         Console.Clear();
         Console.WriteLine("A minotaur appears and charges towards you!");
         Console.ReadLine();
-        hero.location = "boss fight";
+        //hero.location = "boss fight";
         
-       /* string direction = "";
+       string direction = "";
         do
         { direction = Ask("Do you want to stay and face the enemy or flee though a small hole in the ground? (Stay/flee) ");
         } while (!AskYesOrNo($"So you want to to {direction}? "));
@@ -220,29 +220,35 @@ class Program
         if (direction == "stay")
         {
             Console.WriteLine("You stand your ground and face the charging enemy ");
-            hero.Location = "bossfight";
+            hero.location = "boss fight";
             Console.ReadLine();
         }
         else
         {
-            Console.WriteLine(" You flee through the ground ");
-            hero.Location = "shelter";
+            Console.WriteLine("You flee through the ground ");
+            hero.location = "shelter";
             Console.ReadLine();
-        }*/
+        }
     }
     
-  /*  static void Shelter(Hero hero)
+    static void Shelter(Hero hero)
     {
         Console.Clear();
         Console.WriteLine("Through the hole you find yourself in a large dark space\n In front of you a large spider appears and moves towards you");
-        //Enemy spider = new Enemy("Spider", 25);
-        //Battle(hero, spider);
-    
-        Console.WriteLine("The spider drops a special potion, you use it to regain som strength\n There's nothing more in the ground and must face the enemy you fled from");
-        //hero.Health += 50;
-        //hero.Location = "bossfight";
+        if (RollD6() >= 4)
+        {
+            Console.WriteLine("The spider slips in front of you and you smash it");
+            
+        }
+        else
+        {
+            hero.health = hero.health - 10;
+            Console.WriteLine("The spider plunges at you, successfully biting you for some hp before you finish it off.");
+        }
+        
+        hero.location = "boss fight";
         Console.ReadLine();
-    }*/
+    }
 
     static void BossFight(Hero hero)
     {
