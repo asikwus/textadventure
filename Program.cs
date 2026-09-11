@@ -1,4 +1,5 @@
 ﻿namespace TextAdventure;
+
 //Det här är en kommentar.
 class Program
 {
@@ -85,7 +86,7 @@ class Program
                     Console.WriteLine($"You picked up the {tableroomItem}");
             }
         } while (tableroomItem == "");
-        
+
         hero.items.Add(tableroomItem);
 
         Console.ReadLine();
@@ -98,15 +99,30 @@ class Program
         Console.WriteLine("You exit the room and find yourself standing in a dark ");
         Console.WriteLine("hallway. You can either enter another room on your right ");
         Console.WriteLine("side, or continue down the hallway on your left.");
-        while (true)
+        string path = "";
+        bool doorUnlocked = false;
+        while (path == "")
         {
-            string path = Ask("Which path do you choose? ").ToLower();
+            path = Ask("Which path do you choose? ").ToLower();
             if (path == "right")
             {
-                Console.WriteLine("The room appears to be locked.");
+                if (!doorUnlocked)
+                    Console.WriteLine("The door to the room appears to be locked.");
                 if (hero.items.Contains("key"))
                 {
-                    Console.WriteLine("Your key fits in the lock and unlocks the door!");
+                    if (!doorUnlocked)
+                    {
+                        Console.WriteLine("Your key fits in the lock and unlocks the door!");
+                        doorUnlocked = true;
+                    }
+
+                    if (!AskYesOrNo("Do you want to enter the room? "))
+                    {
+                        path = "";
+                        continue;
+                    }
+
+                    Console.WriteLine("You enter the unlocked room.");
                     hero.location = "locked room";
                     hero.items.Remove("key");
                     break;
@@ -119,7 +135,21 @@ class Program
                     break;
                 }
             }
+
+            if (path == "left")
+            {
+                if (!AskYesOrNo("Do you want to continue down the hallway? "))
+                {
+                    path = "";
+                    continue;
+                }
+
+                Console.WriteLine("You continue down the hallway.");
+                hero.location = "third room";
+                break;
+            }
         }
+
 
         Console.ReadLine();
     }
@@ -176,10 +206,12 @@ class Program
         Console.WriteLine("A minotaur appears and charges towards you!");
         Console.ReadLine();
         //hero.location = "boss fight";
-        
-       string direction = "";
+
+        string direction = "";
         do
-        { direction = Ask("Do you want to stay and face the enemy or flee though a small hole in the ground? (Stay/flee) ");
+        {
+            direction = Ask(
+                "Do you want to stay and face the enemy or flee though a small hole in the ground? (Stay/flee) ");
         } while (!AskYesOrNo($"So you want to to {direction}? "));
 
         if (direction == "stay")
@@ -195,22 +227,23 @@ class Program
             Console.ReadLine();
         }
     }
-    
+
     static void Shelter(Hero hero)
     {
         Console.Clear();
-        Console.WriteLine("Through the hole you find yourself in a large dark space\n In front of you a large spider appears and moves towards you");
+        Console.WriteLine(
+            "Through the hole you find yourself in a large dark space\n In front of you a large spider appears and moves towards you");
         if (RollD6() >= 4)
         {
             Console.WriteLine("The spider slips in front of you and you smash it");
-            
         }
         else
         {
             hero.health = hero.health - 10;
-            Console.WriteLine("The spider plunges at you, successfully biting you for some hp before you finish it off.");
+            Console.WriteLine(
+                "The spider plunges at you, successfully biting you for some hp before you finish it off.");
         }
-        
+
         hero.location = "boss fight";
         Console.ReadLine();
     }
@@ -312,7 +345,7 @@ class Program
                                           "and manage to counter-attack minotaur whom is caught off guard. \n"
                                           + "You deal a lot of damage with your weapons.");
                         // Hero attacks
-                        minotaur.health = heroAttack*2;
+                        minotaur.health = heroAttack * 2;
                         break;
                     case "parry":
                         Console.WriteLine("You run towards the minotaur, but lose balance on the shaking ground. \n" +
@@ -330,7 +363,7 @@ class Program
 
             Console.ReadLine();
         } while (hero.health > 0 && minotaur.health > 0);
-        
+
         if (hero.health > 0)
             hero.location = "win";
         else
@@ -363,7 +396,6 @@ class Program
         {
             hero.location = "quit";
         }
-        
     }
 
     // ** QUESTIONS **
