@@ -311,10 +311,6 @@ class Program
                 do
                 {
                     heroAction = Ask("do you want to dodge/jump/parry? ");
-                    if (heroAction != "dodge" || heroAction != "jump" || heroAction != "parry")
-                    {
-                        continue;
-                    }
                 } while (heroAction == "" || !AskYesOrNo($"Are you sure you want to {heroAction}? "));
             }
             else
@@ -353,6 +349,13 @@ class Program
                         tellAmuletEffect(hero);
                         minotaur.health -= heroAttack;
                         break;
+                    case "bonk":
+                        Console.WriteLine("You use the almighty power of Bonk!\n"+
+                                          "The minotaur doesn't stand a chance!");
+                        // Hero attacks
+                        tellAmuletEffect(hero);
+                        minotaur.health -= 50*heroAttack;
+                        break;
                     default: // When you do nothing
                         Console.WriteLine("It lands a critical hit on you!");
                         // Enemy attacks
@@ -388,6 +391,13 @@ class Program
                         // Hero attacks
                         tellAmuletEffect(hero);
                         minotaur.health -= 5;
+                        break;
+                    case "bonk":
+                        Console.WriteLine("You use the almighty power of Bonk!\n"+
+                                          "The minotaur doesn't stand a chance!");
+                        // Hero attacks
+                        tellAmuletEffect(hero);
+                        minotaur.health -= 50*heroAttack;
                         break;
                     default:
                         Console.WriteLine("The ground bounces you back on your feet!");
