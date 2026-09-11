@@ -1,5 +1,5 @@
 ﻿namespace TextAdventure;
-
+//Det här är en kommentar.
 class Program
 {
     static void Main(string[] args)
@@ -16,6 +16,7 @@ class Program
                 case "locked room": LockedRoom(hero); break;
                 case "third room": ThirdRoom(hero); break;
                 case "back outside": BackOutside(hero); break;
+                case "Shelter": Shelter(hero); break;
                 case "boss fight": BossFight(hero); break;
                 case "win": Win(hero); break;
                 case "lose": Lose(hero); break;
@@ -149,7 +150,7 @@ class Program
         Console.Clear();
         Console.WriteLine("On the floor before you lies a lifeless corpse.\n" +
                           "Its hand is clasped around something shiny.\n");
-        if (AskYesOrNo("Do you loot the corpse or leave it?"))
+        if (AskYesOrNo("Do you loot the corpse?"))
         {
             Console.WriteLine("You pick up an old silver necklace.");
             if (RollD6() >= 3) // 67% chance
@@ -174,7 +175,44 @@ class Program
         Console.Clear();
         Console.WriteLine("A minotaur appears and charges towards you!");
         Console.ReadLine();
+        //hero.location = "boss fight";
+        
+       string direction = "";
+        do
+        { direction = Ask("Do you want to stay and face the enemy or flee though a small hole in the ground? (Stay/flee) ");
+        } while (!AskYesOrNo($"So you want to to {direction}? "));
+
+        if (direction == "stay")
+        {
+            Console.WriteLine("You stand your ground and face the charging enemy ");
+            hero.location = "boss fight";
+            Console.ReadLine();
+        }
+        else
+        {
+            Console.WriteLine("You flee through the ground ");
+            hero.location = "shelter";
+            Console.ReadLine();
+        }
+    }
+    
+    static void Shelter(Hero hero)
+    {
+        Console.Clear();
+        Console.WriteLine("Through the hole you find yourself in a large dark space\n In front of you a large spider appears and moves towards you");
+        if (RollD6() >= 4)
+        {
+            Console.WriteLine("The spider slips in front of you and you smash it");
+            
+        }
+        else
+        {
+            hero.health = hero.health - 10;
+            Console.WriteLine("The spider plunges at you, successfully biting you for some hp before you finish it off.");
+        }
+        
         hero.location = "boss fight";
+        Console.ReadLine();
     }
 
     static void BossFight(Hero hero)
@@ -301,17 +339,31 @@ class Program
 
     static void Win(Hero hero)
     {
+        Console.Clear();
+        Console.WriteLine("You beat the minotaur and escaped the area!");
         hero.location = "game over";
+        Console.ReadLine();
     }
 
     static void Lose(Hero hero)
     {
+        Console.Clear();
+        Console.WriteLine("You died!");
         hero.location = "game over";
+        Console.ReadLine();
     }
 
     static void GameOver(Hero hero)
     {
-        hero.location = "new game";
+        if (AskYesOrNo("Do you want to play again? "))
+        {
+            hero.location = "new game";
+        }
+        else
+        {
+            hero.location = "quit";
+        }
+        
     }
 
     // ** QUESTIONS **
