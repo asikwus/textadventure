@@ -392,6 +392,8 @@ class Program
         if (AskYesOrNo("Do you want to play again? "))
         {
             hero.location = "new game";
+            hero.health = 100;
+            hero.items.Clear();
         }
         else
         {
