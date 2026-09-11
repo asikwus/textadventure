@@ -17,10 +17,11 @@ class Program
                 case "locked room": LockedRoom(hero); break;
                 case "third room": ThirdRoom(hero); break;
                 case "back outside": BackOutside(hero); break;
-                case "Shelter": Shelter(hero); break;
+                case "shelter": Shelter(hero); break;
                 case "boss fight": BossFight(hero); break;
                 case "win": Win(hero); break;
                 case "lose": Lose(hero); break;
+                case "game over": GameOver(hero); break;
             }
         }
     }
