@@ -18,6 +18,7 @@ class Program
                 case "third room": ThirdRoom(hero); break;
                 case "back outside": BackOutside(hero); break;
                 case "shelter": Shelter(hero); break;
+                case "cell": Cell(hero); break;
                 case "boss fight": BossFight(hero); break;
                 case "win": Win(hero); break;
                 case "lose": Lose(hero); break;
@@ -241,10 +242,41 @@ class Program
         else
         {
             hero.health = hero.health - 10;
-            Console.WriteLine("The spider plunges at you, successfully biting you for some hp before you finish it off.");
+            Console.WriteLine("The spider plunges at you, successfully biting you for some hp before you finish it off. -10hp");
         }
-        Console.WriteLine("There's nothing more in the burrow, you have to turn around and face the enemy you fled from");
-        hero.location = "boss fight";
+        
+        if (AskYesOrNo("Behind spider you've slain, you see a small door on the wall, do you want to go there? "))
+        {
+            hero.location = "cell";
+        }
+        else
+        {
+            Console.WriteLine("There's nothing more in the burrow, you turn around to face the enemy you fled from");
+            hero.location = "boss fight";
+            Console.ReadLine();
+        }
+
+    }
+
+    static void Cell(Hero hero)
+    {
+        Console.Clear();
+        if (AskYesOrNo("In the cell you find an old potion on the floor, do you want to drink it?"))
+        {
+            if (RollD6() >= 5)
+            {
+                Console.WriteLine("You take a sip from the potion and feels how it empowers you +25hp");
+                hero.health += 25;
+            }
+            else
+            {
+                hero.health = hero.health - 10;
+                Console.WriteLine("The potion drains your energy -10hp ");
+            }
+            
+        }
+        Console.WriteLine("There's nothing more in the cell, you go back to the foe you fled from");
+        hero.location ="boss fight";
         Console.ReadLine();
     }
 
