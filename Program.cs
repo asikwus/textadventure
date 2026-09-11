@@ -378,7 +378,7 @@ class Program
                                           + "You deal a lot of damage with your weapons.");
                         // Hero attacks
                         tellAmuletEffect(hero);
-                        minotaur.health = heroAttack * 2;
+                        minotaur.health -= heroAttack * 2;
                         break;
                     case "parry":
                         Console.WriteLine("You run towards the minotaur, but lose balance on the shaking ground. \n" +
