@@ -353,7 +353,7 @@ class Program
                         tellAmuletEffect(hero);
                         minotaur.health -= heroAttack;
                         break;
-                    default:
+                    default: // When you do nothing
                         Console.WriteLine("It lands a critical hit on you!");
                         // Enemy attacks
                         hero.health -= 25;
@@ -374,9 +374,10 @@ class Program
                         break;
                     case "jump":
                         Console.WriteLine("You jump and avoid the earthquake from the club,\n" +
-                                          "and manage to counter-attack minotaur whom is caught off guard. \n"
+                                          "and manage to counter-attack the minotaur whom is caught off guard. \n"
                                           + "You deal a lot of damage with your weapons.");
                         // Hero attacks
+                        tellAmuletEffect(hero);
                         minotaur.health = heroAttack * 2;
                         break;
                     case "parry":
@@ -385,6 +386,7 @@ class Program
                         // Minotaur attacks
                         hero.health -= 5;
                         // Hero attacks
+                        tellAmuletEffect(hero);
                         minotaur.health -= 5;
                         break;
                     default:
