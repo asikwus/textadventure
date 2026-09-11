@@ -413,7 +413,7 @@ class Program
     static void Lose(Hero hero)
     {
         Console.Clear();
-        Console.WriteLine("You died!");
+        Console.WriteLine("You died!\nGAME OVER");
         hero.location = "game over";
         Console.ReadLine();
     }
@@ -428,6 +428,7 @@ class Program
         }
         else
         {
+            Console.WriteLine("Thanks for playing!");
             hero.location = "quit";
         }
     }
