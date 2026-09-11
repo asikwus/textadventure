@@ -241,10 +241,9 @@ class Program
         else
         {
             hero.health = hero.health - 10;
-            Console.WriteLine(
-                "The spider plunges at you, successfully biting you for some hp before you finish it off.");
+            Console.WriteLine("The spider plunges at you, successfully biting you for some hp before you finish it off.");
         }
-
+        Console.WriteLine("There's nothing more in the burrow, you have to turn around and face the enemy you fled from");
         hero.location = "boss fight";
         Console.ReadLine();
     }
