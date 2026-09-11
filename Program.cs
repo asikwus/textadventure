@@ -374,17 +374,31 @@ class Program
 
     static void Win(Hero hero)
     {
+        Console.Clear();
+        Console.WriteLine("You beat the minotaur and escaped the area!");
         hero.location = "game over";
+        Console.ReadLine();
     }
 
     static void Lose(Hero hero)
     {
+        Console.Clear();
+        Console.WriteLine("You died!");
         hero.location = "game over";
+        Console.ReadLine();
     }
 
     static void GameOver(Hero hero)
     {
-        hero.location = "new game";
+        if (AskYesOrNo("Do you want to play again? "))
+        {
+            hero.location = "new game";
+        }
+        else
+        {
+            hero.location = "quit";
+        }
+        
     }
 
     // ** QUESTIONS **
