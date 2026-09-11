@@ -54,41 +54,27 @@ class Program
         Console.WriteLine("a knife and a key.");
         Console.WriteLine("");
         Console.WriteLine("You can only pick up one of these items.");
-        string tableroomItem = "";
+        string[] choices = new string[] {"key","knife","nothing"};
+        string pickedChoice;
         do
         {
-            tableroomItem = Ask("Which item do you choose? ");
-            switch (tableroomItem)
-            {
-                case "key":
-                    tableroomItem = "key";
-                    break;
-                case "knife":
-                    tableroomItem = "knife";
-                    break;
-                case "none":
-                    tableroomItem = "none";
-                    break;
-                default:
-                    tableroomItem = "";
-                    continue;
-            }
+            pickedChoice = AskAndChoose("What would you like to pick up? ", choices);
+        } while (!AskYesOrNo($"Do you want to pick up {pickedChoice}?"));
 
-            if (tableroomItem == "none")
-            {
-                if (!AskYesOrNo("Do you want to proceed without picking an item? "))
-                    tableroomItem = "";
-            }
-            else
-            {
-                if (!AskYesOrNo($"Do you want to pick up the {tableroomItem}? "))
-                    tableroomItem = "";
-                else
-                    Console.WriteLine($"You picked up the {tableroomItem}");
-            }
-        } while (tableroomItem == "");
-
-        hero.items.Add(tableroomItem);
+        switch (pickedChoice)
+        {
+            case "key":
+                Console.WriteLine("You picked up the key.");
+                hero.items.Add("key");
+                break;
+            case "knife":
+                Console.WriteLine("You picked up the knife.");
+                hero.items.Add("knife");
+                break;
+            case "nothing":
+                Console.WriteLine("You proceed without picking any items.");
+                break;
+        }
 
         Console.ReadLine();
         hero.location = "corridor";
@@ -419,8 +405,16 @@ class Program
         do
         {
             Console.Write(question);
+            Console.Write("(");
+            for (int i = 0; i < choices.Length; i++)
+            {
+                Console.Write(choices[i]);
+                if (i != choices.Length - 1)
+                    Console.Write("|");
+            }
+            Console.Write(") ");
             choice = Console.ReadLine().Trim();
-        }  while (choices.Contains(choice));
+        }  while (!choices.Contains(choice));
         return choice;
     }
 
