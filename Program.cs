@@ -413,6 +413,17 @@ class Program
         return response;
     }
 
+    static string AskAndChoose(string question, string[] choices)
+    {
+        string choice;
+        do
+        {
+            Console.Write(question);
+            choice = Console.ReadLine().Trim();
+        }  while (choices.Contains(choice));
+        return choice;
+    }
+
     static bool AskYesOrNo(string question)
     {
         while (true)
