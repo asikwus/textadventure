@@ -84,7 +84,7 @@ class Program
                     Console.WriteLine($"You picked up the {tableroomItem}");
             }
         } while (tableroomItem == "");
-
+        
         hero.items.Add(tableroomItem);
 
         Console.ReadLine();
@@ -97,28 +97,15 @@ class Program
         Console.WriteLine("You exit the room and find yourself standing in a dark ");
         Console.WriteLine("hallway. You can either enter another room on your right ");
         Console.WriteLine("side, or continue down the hallway on your left.");
-        string path = "";
-        bool doorUnlocked = false;
-        while (path == "")
+        while (true)
         {
-            path = Ask("Which path do you choose? ").ToLower();
+            string path = Ask("Which path do you choose? ").ToLower();
             if (path == "right")
             {
-                if (!doorUnlocked)
-                    Console.WriteLine("The door to the room appears to be locked.");
+                Console.WriteLine("The room appears to be locked.");
                 if (hero.items.Contains("key"))
                 {
-                    if (!doorUnlocked)
-                    {
-                        Console.WriteLine("Your key fits in the lock and unlocks the door!");
-                        doorUnlocked = true;
-                    }
-                    if (!AskYesOrNo("Do you want to enter the room? "))
-                    {
-                        path = "";
-                        continue;
-                    }
-                    Console.WriteLine("You enter the unlocked room.");
+                    Console.WriteLine("Your key fits in the lock and unlocks the door!");
                     hero.location = "locked room";
                     hero.items.Remove("key");
                     break;
@@ -130,17 +117,6 @@ class Program
                     hero.location = "third room";
                     break;
                 }
-            }
-            if (path == "left")
-            {
-                if (!AskYesOrNo("Do you want to continue down the hallway? "))
-                {
-                    path = "";
-                    continue;
-                }
-                Console.WriteLine("You continue down the hallway.");
-                hero.location = "third room";
-                break;
             }
         }
 
@@ -155,7 +131,7 @@ class Program
         if (AskYesOrNo("Do you want it instead of " +
                        "your wooden sword? "))
         {
-            Console.WriteLine("You toss away your wooden sword for the new shiny one.");
+            Console.WriteLine("You tossed away your wooden sword for the new shiny one.");
             hero.items.Remove("wooden sword");
             hero.items.Add("shiny sword");
         }
@@ -173,31 +149,18 @@ class Program
         Console.Clear();
         Console.WriteLine("On the floor before you lies a lifeless corpse.\n" +
                           "Its hand is clasped around something shiny.\n");
-        while (true)
+        if (AskYesOrNo("Do you loot the corpse or leave it?"))
         {
-            string choice = Ask("Do you loot the corpse or leave it? ");
-            if (choice == "loot")
+            Console.WriteLine("You pick up an old silver necklace.");
+            if (RollD6() >= 3) // 67% chance
             {
-                if (!AskYesOrNo("You want to loot it? "))
-                    continue;
-                Console.WriteLine("You pick up an old silver necklace.");
-                if (RollD6() >= 3) // 67% chance
-                {
-                    Console.WriteLine("A warm feeling spreads over your body.");
-                    hero.items.Add("blessed amulet");
-                }
-                else
-                {
-                    Console.WriteLine("A cold shiver runs down your spine.");
-                    hero.items.Add("cursed amulet");
-                }
-
-                break;
+                Console.WriteLine("A warm feeling spreads over your body.");
+                hero.items.Add("blessed amulet");
             }
-            else if (choice == "leave")
+            else
             {
-                if (AskYesOrNo("You want to leave it? "))
-                    break;
+                Console.WriteLine("A cold shiver runs down your spine.");
+                hero.items.Add("cursed amulet");
             }
         }
 
@@ -311,7 +274,7 @@ class Program
                                           "and manage to counter-attack minotaur whom is caught off guard. \n"
                                           + "You deal a lot of damage with your weapons.");
                         // Hero attacks
-                        minotaur.health = heroAttack * 2;
+                        minotaur.health = heroAttack*2;
                         break;
                     case "parry":
                         Console.WriteLine("You run towards the minotaur, but lose balance on the shaking ground. \n" +
@@ -329,16 +292,11 @@ class Program
 
             Console.ReadLine();
         } while (hero.health > 0 && minotaur.health > 0);
-
+        
         if (hero.health > 0)
-        {
-            Console.WriteLine("The minotaur perished!");
             hero.location = "win";
-        }
         else
-        {
             hero.location = "lose";
-        }
     }
 
     static void Win(Hero hero)
@@ -353,15 +311,7 @@ class Program
 
     static void GameOver(Hero hero)
     {
-        Console.WriteLine("GAME OVER!");
-        if (AskYesOrNo("Would you like to play again? "))
-        {
-            hero.location = "new game";
-        }
-        else
-        {
-            hero.location = "quit";
-        }
+        hero.location = "new game";
     }
 
     // ** QUESTIONS **
